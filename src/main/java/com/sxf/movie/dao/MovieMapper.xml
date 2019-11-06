@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sxf.movie.dao.MovieMapper">
+	
+	<!-- 列表 模糊查询 区间查询 -->
+	<select id="selects" resultType="movie">
+		select * from t_movie
+		<where>
+			<!-- 电影名的模糊查询 -->
+			<if test="name!=null and name!=''">
+				and name like "%"#{name}"%"
+			</if>
+			<!-- 作者的模糊查询 -->
+			<if test="actor!=null and actor!=''">
+				and actor like "%"#{actor}"%"
+			</if>
+			<!-- 年代的模糊查询 -->
+			<if test="year!=null and year!=''">
+				and year like "%"#{year}"%"
+			</if>
+			<!-- 开始时间和结束时间 -->
+			<if test="startTime!=null and startTime!=''">
+				and time >=#{startTime}
+			</if>
+			<if test="endTime!=null and endTime!=''">
+				and time &lt;=#{endTime}
+			</if>
+			<!--最高价和最低价 -->
+			<if test="startPrice!=null and startPrice!=''">
+				and price >=#{startPrice}
+			</if>
+			<if test="endPrice!=null and endPrice!=''">
+				and price &lt;=#{endPrice}
+			</if>
+			<!--电影的最短时间和最长时间 -->
+			<if test="startMit!=null and startMit!=''">
+				and mit >=#{startMit}
+			</if>
+			<if test="endMit!=null and endMit!=''">
+				and mit &lt;=#{endMit}
+			</if>
+		</where>
+	</select>
+	
+	<delete id="delAll">
+		delete from t_movie where id in
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<update id="update">
+		update t_movie set stutas=#{stutas} where id=#{id}
+	</update>
+</mapper>
